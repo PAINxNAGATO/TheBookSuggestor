@@ -1,0 +1,30 @@
+<!-- templates/index.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Recommendation System</title>
+</head>
+<body>
+    <h1>Welcome to the Book Recommendation System</h1>
+
+    <form action="/recommend-books" method="get">
+        <label for="genre">Choose a genre:</label>
+        <input type="text" id="genre" name="genre" required>
+        <button type="submit">Get Recommendations</button>
+    </form>
+
+    <div id="results">
+        {% if books %}
+            <h2>Top Books in {{ genre }}</h2>
+            <ul>
+                {% for book in books %}
+                    <li>{{ book.title }} by {{ book.author }} (Rating: {{ book.rating }})</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+</body>
+</html>
