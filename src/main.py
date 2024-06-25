@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Request, HTTPException, Query
+from fastapi import FastAPI, Request, HTTPException, Query, Form
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from typing import List
@@ -17,8 +17,8 @@ class Book(BaseModel):
 def read_root(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
-@app.get("/recommend-books", response_model=List[Book])
-def fetch_top_books(genre: str = Query(..., description="The genre of books to recommend")):
+@app.get("/recommend-books", response_class=HTMLResponse)
+def fetch_top_books(request: Request, genre: str = Query(..., description="The genre of books to recommend")):
     GOOGLE_BOOKS_API_URL = "https://www.googleapis.com/books/v1/volumes"
     MAX_RESULTS_PER_PAGE = 40  # Max results per page from Google Books API
     MAX_TOTAL_RESULTS = 100  # Total number of results desired
@@ -57,7 +57,17 @@ def fetch_top_books(genre: str = Query(..., description="The genre of books to r
     except requests.RequestException as e:
         raise HTTPException(status_code=500, detail=f"Error fetching books: {e}")
 
-    return books[:MAX_TOTAL_RESULTS]
+    return templates.TemplateResponse("books.html", {"request": request, "books": books[:MAX_TOTAL_RESULTS], "genre": genre})
+
+@app.post("/top-10-books", response_class=HTMLResponse)
+def get_top_10_books(request: Request, genre: str = Form(...)):
+    books = fetch_top_books(request, genre)
+    top_10_books = sorted(books.context['books'], key=lambda x: x.rating, reverse=True)[:10]
+    return templates.TemplateResponse("top_10_books.html", {"request": request, "books": top_10_books})
+
+@app.post("/select-book", response_class=HTMLResponse)
+def select_book(request: Request, selected_book_title: str = Form(...)):
+    return templates.TemplateResponse("select_book.html", {"request": request, "selected_book_title": selected_book_title})
 
 if __name__ == "__main__":
     import uvicorn

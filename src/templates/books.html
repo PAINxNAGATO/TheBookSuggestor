@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Top 100 Books</title>
+</head>
+<body>
+    <h1>Top 100 Books in {{ genre }}</h1>
+    <ul>
+        {% for book in books %}
+            <li>{{ book.title }} by {{ book.author }} (Rating: {{ book.rating }})</li>
+        {% endfor %}
+    </ul>
+    <form action="/top-10-books" method="post">
+        <input type="hidden" name="genre" value="{{ genre }}">
+        <button type="submit">Get Top 10 Books</button>
+    </form>
+</body>
+</html>
