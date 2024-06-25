@@ -80,9 +80,15 @@ async def fetch_top_ten_books(request: Request):
 @app.post("/select-book", response_class=HTMLResponse)
 async def select_book(request: Request, book_title: str = Form(...)):
     global books_data
-    print(f"Top books: {books_data['top_books']}")
-    selected_book = next((book for book in books_data["top_books"] if book.title == book_title), None)
-    print(f"Selected book: {selected_book}")
+    book_title_lower = book_title.lower()
+    selected_book = next(
+        (book for book in books_data["top_books"] if book_title_lower in book.title.lower()), 
+        None
+    )
+
+    if not selected_book:
+        raise HTTPException(status_code=404, detail=f"Book matching '{book_title}' not found.")
+
     books_data["selected_book"] = selected_book  # Store the selected book
 
     return templates.TemplateResponse("selected_book.html", {"request": request, "selected_book": selected_book})
