@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Top 10 Books</title>
+</head>
+<body>
+    <h1>Top 10 Books</h1>
+    <ul>
+    {% for book in top_books %}
+        <li>{{ book.title }} by {{ book.author }} - Rating: {{ book.rating }}</li>
+    {% endfor %}
+    </ul>
+    <form action="/select-book" method="post">
+        <label for="book_title">Select a book by title:</label>
+        <input type="text" id="book_title" name="book_title" required>
+        <button type="submit">Select Book</button>
+    </form>
+</body>
+</html>

@@ -1,16 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Book Suggestor</title>
+    <title>Book Recommender</title>
 </head>
 <body>
-    <h1>Welcome to the Book Suggestor</h1>
-    <form action="/recommend-books" method="get">
+    <h1>Welcome to the Book Recommender!</h1>
+    <form action="/recommend-books" method="post">
         <label for="genre">Enter a genre:</label>
         <input type="text" id="genre" name="genre" required>
-        <button type="submit">Get Top 100 Books</button>
+        <button type="submit">Get Books</button>
     </form>
 </body>
 </html>
